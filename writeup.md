@@ -25,6 +25,8 @@ The goals / steps of this project are the following:
 [image6]: ./examples/stopsign.jpg "Traffic Sign 3"
 [image7]: ./examples/bumpyroad.jpg "Traffic Sign 4"
 [image8]: ./examples/yield.jpg "Traffic Sign 5"
+[image9]: ./examples/conv1.jpg "Conv 1"
+[image10]: ./examples/conv2.jpg "Conv 2"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -120,9 +122,9 @@ drop out keep prob: 0.8
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 0.999
+* validation set accuracy of 0.977
+* test set accuracy of 0.965
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
@@ -171,13 +173,13 @@ Here are the results of the prediction:
 | 30 km/h	      		| 30 km/h   					 				|
 | Slippery Road			| Slippery Road      							|
 | Stop Sign      		| Stop sign   									| 
-| Bumpy road  			| Bicycles crossing 							|
+| Bumpy road  			| Bumpy road        							|
 | Yield					| Yield											|
 
 
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares unfavorably to the accuracy on the test set of 96%.
+The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 96.5%.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
@@ -188,25 +190,34 @@ For the first image, the model is absolutely sure that this is a 30 km/h sign (p
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | .9999...    			| 30 km/h   									| 
-| 1e-14     			| 50 km/h 										|
-| 3e-22					| Bicycles crossing								|
-| 5e-23	      			| 60 km/h   					 				|
-| 2e-23				    | end of 80 km/h     							|
+| 1e-21     			| 20 km/h 										|
+| 4e-24					| Bicycles crossing								|
+| 3e-24	      			| 50 km/h   					 				|
+| 4e-27				    | Road work          							|
 
 
-For the second image, the third image and the fifth image, the model is also quite sure about the result( probability >= 0.9998)
+For the second image, the third image and the fifth image, the model get very high probability on result( probability > 0.9999)
 
-For the forth image (the incorrect predict one), the probability is relatively lower (probability of 0.978) compare to other images.
+For the forth image, the probability is relatively lower (probability of 0.74) compare to other images.
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .978       			| Bicycles crossing   							| 
-| 0.02      			| Bumpy road 									|
-| 2e-14					| Wild animals crossing							|
-| 1e-14	      			| Wild animals crossing   		 				|
-| 3e-15				    | No passing for vehicles over 3.5 metric tons	|
+| .74       			| Bumpy road        							| 
+| 0.25      			| Bicycles crossing 							|
+| 9e-11                 | Road work          							|
+| 2e-12	      			| No passing             		 				|
+| 1e-13				    | No vehicles                               	|
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 ####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+Here is the visualization of feature map from layer "Conv 1" and "Conv 2":
+
+![alt text][image9]
+
+![alt text][image10]
+
+From the image we can find some feature maps react with high activation to the sign's boundary outline, some react to the contrast in the sign's painted symbol.
+And feature map from "Conv 2" is more abstract compare to feature map from "Conv 1"
+
 
 

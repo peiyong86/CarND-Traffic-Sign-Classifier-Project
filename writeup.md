@@ -20,11 +20,11 @@ The goals / steps of this project are the following:
 [image1]: ./examples/visualization.png "Visualization"
 [image2]: ./examples/originalimages.jpg "originalimages"
 [image3]: ./examples/augmentedimages.jpg "augmentedimages"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image4]: ./examples/30kmh.jpg "Traffic Sign 1"
+[image5]: ./examples/sliproad.jpg "Traffic Sign 2"
+[image6]: ./examples/stopsign.jpg "Traffic Sign 3"
+[image7]: ./examples/bumpyroad.jpg "Traffic Sign 4"
+[image8]: ./examples/yield.jpg "Traffic Sign 5"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -84,21 +84,25 @@ My final model consisted of the following layers:
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Input         		| 32x32x3 RGB image   							| 
-| Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x6 	|
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x12 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 14x14x6   				|
-| Convolution 5x5	    | 1x1 stride, valid padding, outputs 10x10x16	|
+| Max pooling	      	| 2x2 stride,  outputs 14x14x12   				|
+| Convolution 5x5	    | 1x1 stride, valid padding, outputs 10x10x24	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 5x5x16   				|
-| Flatten				|												|
+| Max pooling	      	| 2x2 stride,  outputs 5x5x24   				|
+| Convolution 2x2	    | 1x1 stride, valid padding, outputs 4x4x48 	|
+| RELU					|												|
+| Flatten				|input conv2									|
+| Flatten				|input conv3									|
+| Concat				|concate above 2 flat layer						|
 | Dropout				| 0.8											|
-| Fully connected		| inputs 400, outputs 120  						|
+| Fully connected		| inputs 1368, outputs 512  					|
 | RELU					|												|
 | Dropout				|												|
-| Fully connected		| inputs 120, outputs 84  						|
+| Fully connected		| inputs 512, outputs 256  						|
 | RELU					|												|
 | Dropout				| 0.8											|
-| Fully connected		| inputs 84, outputs 10  						|
+| Fully connected		| inputs 256, outputs num of classes  			|
 | Softmax				| etc.        									|
 |						|												|
 |						|												|
@@ -108,9 +112,10 @@ My final model consisted of the following layers:
 ####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
 To train the model, I used an AdamOptimizer, with following parameters:
-learning rate: 0.001
+learning rate: 0.0005
 batch size: 128
-epoch num: 1000
+epoch num: 100
+drop out keep prob: 0.8
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -144,7 +149,7 @@ The architecture from http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pd
 * Why did you believe it would be relevant to the traffic sign application?
 Because the paper reports really good results on traffic sign application.
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
-If the accuracy is good on all three parts of data, then it evidences that the model is working well.
+If three accuracy is high, it evidences that the model does not over-fitting or under-fitting, and have good generalize ability.
 
 ###Test a Model on New Images
 
@@ -155,7 +160,7 @@ Here are five German traffic signs that I found on the web:
 ![alt text][image4] ![alt text][image5] ![alt text][image6] 
 ![alt text][image7] ![alt text][image8]
 
-The first image might be difficult to classify because ...
+The forth image might be difficult to classify because the sign image is rotated a lot and the image ratio is quite different from training data.
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -163,31 +168,42 @@ Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
+| 30 km/h	      		| 30 km/h   					 				|
 | Slippery Road			| Slippery Road      							|
+| Stop Sign      		| Stop sign   									| 
+| Bumpy road  			| Bicycles crossing 							|
+| Yield					| Yield											|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+
+
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares unfavorably to the accuracy on the test set of 96%.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 14th cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+For the first image, the model is absolutely sure that this is a 30 km/h sign (probability of 0.99...), and the image does contain a 30 km/h sign. The top five soft max probabilities were
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+| .9999...    			| 30 km/h   									| 
+| 1e-14     			| 50 km/h 										|
+| 3e-22					| Bicycles crossing								|
+| 5e-23	      			| 60 km/h   					 				|
+| 2e-23				    | end of 80 km/h     							|
 
 
-For the second image ... 
+For the second image, the third image and the fifth image, the model is also quite sure about the result( probability >= 0.9998)
+
+For the forth image (the incorrect predict one), the probability is relatively lower (probability of 0.978) compare to other images.
+| Probability         	|     Prediction	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| .978       			| Bicycles crossing   							| 
+| 0.02      			| Bumpy road 									|
+| 2e-14					| Wild animals crossing							|
+| 1e-14	      			| Wild animals crossing   		 				|
+| 3e-15				    | No passing for vehicles over 3.5 metric tons	|
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 ####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?

@@ -25,8 +25,8 @@ The goals / steps of this project are the following:
 [image6]: ./examples/stopsign.jpg "Traffic Sign 3"
 [image7]: ./examples/bumpyroad.jpg "Traffic Sign 4"
 [image8]: ./examples/yield.jpg "Traffic Sign 5"
-[image9]: ./examples/conv1.jpg "Conv 1"
-[image10]: ./examples/conv2.jpg "Conv 2"
+[image9]: ./examples/conv1.png "Conv 1"
+[image10]: ./examples/conv2.png "Conv 2"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  

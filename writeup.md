@@ -18,8 +18,8 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./examples/visualization.png "Visualization"
-[image2]: ./examples/originalimages.jpg "originalimages"
-[image3]: ./examples/augmentedimages.jpg "augmentedimages"
+[image2]: ./examples/originalimages.png "originalimages"
+[image3]: ./examples/augmentedimages.png "augmentedimages"
 [image4]: ./examples/30kmh.jpg "Traffic Sign 1"
 [image5]: ./examples/sliproad.jpg "Traffic Sign 2"
 [image6]: ./examples/stopsign.jpg "Traffic Sign 3"

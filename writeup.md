@@ -197,6 +197,7 @@ For the first image, the model is absolutely sure that this is a 30 km/h sign (p
 For the second image, the third image and the fifth image, the model is also quite sure about the result( probability >= 0.9998)
 
 For the forth image (the incorrect predict one), the probability is relatively lower (probability of 0.978) compare to other images.
+
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | .978       			| Bicycles crossing   							| 

@@ -61,11 +61,14 @@ Here is an exploratory visualization of the data set. It is a bar chart showing 
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I normalized the image data so that data have mean 0 and variance of 1.
-Normalization also makes the values of each feature have equal range. So that the corrections caused by learning rate would same in each dimension.
+As a first step, I create an equal distribution of training data by duplication of original dataset, that will make sure that each traffic sign will get similar training. 
+After duplication, total num of training set is 86430.
+Each class has 2010 samples.
+
+As a second step, I normalized the image data so that data have mean 0 and variance of 1.
+Normalization is very import, it makes the values of each feature have equal range. So that the corrections caused by learning rate would same in each dimension.
 
 I decided to generate additional data because data augmentation can reduce over-fitting problem and boost the performance.
-
 To add more data to the the data set, I used the following techniques from this paper: http://yann.lecun.com/exdb/publis/pdf/sermanet-ijcnn-11.pdf
 
 The data augmentation techniques I used include: rescale, shift and rotate.
@@ -117,15 +120,24 @@ My final model consisted of the following layers:
 To train the model, I used an AdamOptimizer, with following parameters:
 learning rate: 0.0005
 batch size: 128
-epoch num: 100
+max epoch num: 200
 drop out keep prob: 0.8
+
+I used a maxmium training epoch number of 200, and a stop condition, that when met the training iteration stops. 
+The stop condition is: performance does not increase in last 20 epochs.
+This can save processing time.
+
+The final model is choosed base on validation accuracy.
+The model with highest validation accuracy will be choosed as final model.
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
+In my experiment, the training stoped at epoch 109, and the model at epoch 89 was choosed.
+
 My final model results were:
-* training set accuracy of 0.999
-* validation set accuracy of 0.977
-* test set accuracy of 0.965
+training set accuracy of 0.9999305796598403
+validation set accuracy of 0.9841269838836999
+test set accuracy of 0.9687252571728149
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
@@ -172,7 +184,7 @@ Here are the results of the prediction:
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | 30 km/h	      		| 30 km/h   					 				|
-| Slippery Road			| Slippery Road      							|
+| Slippery Road			| Dangerous curve to the right 					|
 | Stop Sign      		| Stop sign   									| 
 | Bumpy road  			| Bumpy road        							|
 | Yield					| Yield											|
@@ -180,34 +192,24 @@ Here are the results of the prediction:
 
 
 
-The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 96.5%.
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares less favorably to the accuracy on the test set of 96.5%.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 14th cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 15th cell of the Ipython notebook.
 
 For the first image, the model is absolutely sure that this is a 30 km/h sign (probability of 0.99...), and the image does contain a 30 km/h sign. The top five soft max probabilities were
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | .9999...    			| 30 km/h   									| 
-| 1e-21     			| 20 km/h 										|
-| 4e-24					| Bicycles crossing								|
-| 3e-24	      			| 50 km/h   					 				|
-| 4e-27				    | Road work          							|
+| 4e-28     			| 20 km/h 										|
+| 1e-29					| 50 km/h       								|
+| 5e-32	      			| 70 km/h   					 				|
+| .0				    | 60 km/h            							|
 
 
-For the second image, the third image and the fifth image, the model get very high probability on result( probability > 0.9999)
-
-For the forth image, the probability is relatively lower (probability of 0.74) compare to other images.
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .74       			| Bumpy road        							| 
-| 0.25      			| Bicycles crossing 							|
-| 9e-11                 | Road work          							|
-| 2e-12	      			| No passing             		 				|
-| 1e-13				    | No vehicles                               	|
+For the other images, the model also get very high probability on result( probability > 0.9999)
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 ####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
@@ -220,5 +222,13 @@ Here is the visualization of feature map from layer "Conv 1" and "Conv 2":
 From the image we can find some feature maps react with high activation to the sign's boundary outline, some react to the contrast in the sign's painted symbol.
 And feature map from "Conv 2" is more abstract compare to feature map from "Conv 1"
 
+### Other
+According to the reviews from udacity, I transfer colorspace of data from rgb to grayscale, which decrease input dimension into 1/3 from 
+The final model of gray scale data's results were:
+training set accuracy of 0.9995950480157353
+validation set accuracy of 0.9748299319727891
+test set accuracy of 0.9667458430416321
 
-
+The result is similar to the colorspace data's result.
+However the grayscale model got poor result on 5 web images of trafic signs, which is 0% accuracy.
+Please see Traffic_Sign_Classifier_gray.ipynb in my git repo for detail.
